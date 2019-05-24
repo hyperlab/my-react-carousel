@@ -22,7 +22,7 @@ function findClosestPath(source, end, total) {
 }
 
 const Dot = ({ active, onClick }) => (
-  <div
+  <button
     onClick={onClick}
     style={{
       width: "8px",
@@ -30,37 +30,25 @@ const Dot = ({ active, onClick }) => (
       borderRadius: "50%",
       border: "1px solid #000",
       background: active ? "#000" : "transparent",
-      margin: "8px"
+      margin: "8px",
+      padding: "8px"
     }}
   />
 );
 
-const dotsRenderer = ({
-  slides,
-  currentSlide,
-  totalSlides,
-  goToSlide,
-  next,
-  previous
-}) => {
-  const dots = Array.from(Array(totalSlides)).map((_, i) => i);
+const dotsRenderer = ({ slides, currentStep, totalSteps, goToStep }) => {
+  const dots = Array.from(Array(totalSteps)).map((_, i) => i);
 
   return (
     <>
       {slides}
-      <div style={{ display: "flex" }}>
-        {dots.map(i => (
-          <Dot
-            key={i}
-            active={i === currentSlide}
-            onClick={() =>
-              goToSlide(findClosestPath(currentSlide, i, totalSlides))
-            }
-          />
-        ))}
-      </div>
-      <button onClick={previous}>prev</button>
-      <button onClick={next}>next</button>
+      {dots.map(i => (
+        <Dot
+          key={i}
+          active={i === currentStep}
+          onClick={() => goToStep(findClosestPath(currentStep, i, totalSteps))}
+        />
+      ))}
     </>
   );
 };

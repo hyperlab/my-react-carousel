@@ -22,15 +22,15 @@ const Carousel = (
 ) => {
   const [currentIndex, setIndex] = React.useState(0);
 
-  const { slides, slideCount } = useMemo(() => {
+  const { slides, slideCount, preSlidesCount } = useMemo(() => {
     const originalSlides = React.Children.toArray(children);
     const slideCount = originalSlides.length;
 
     const preSlides = infinite
-      ? originalSlides.slice(slideCount - slidesToShow)
+      ? originalSlides.slice(slideCount - (slidesToShow + 2))
       : [];
     const postSlides = infinite
-      ? originalSlides.slice(0, slidesToShow + 1)
+      ? originalSlides.slice(0, slidesToShow + 2)
       : [];
 
     const slides = [...preSlides, ...originalSlides, ...postSlides].map(
@@ -45,7 +45,8 @@ const Carousel = (
 
     return {
       slides,
-      slideCount
+      slideCount,
+      preSlidesCount: preSlides.length
     };
   }, [children, infinite, slidesToShow]);
 
@@ -149,13 +150,13 @@ const Carousel = (
     )
   );
 
-  const preSlidesCount = infinite ? slidesToShow : 0;
+  const centeringOffset = centerCurrentSlide
+    ? (slidesToShow / 2 - 0.5) * itemWidth
+    : 0;
   const offset =
-    touchOffset -
-    (currentIndex + preSlidesCount) * itemWidth +
-    (centerCurrentSlide ? itemWidth / 2 + (slidesToShow / 2 - 1) * itemWidth : 0);
+    touchOffset - (currentIndex + preSlidesCount) * itemWidth + centeringOffset;
   const transition = disableTransition || isTouching ? 0 : transitionDuration;
-  const currentSlide =
+  const currentStep =
     currentIndex >= slideCount
       ? currentIndex - slideCount
       : currentIndex < 0
@@ -165,9 +166,9 @@ const Carousel = (
   return render({
     next,
     previous,
-    totalSlides: slideCount,
-    currentSlide,
-    goToSlide: setIndex,
+    totalSteps: infinite ? slideCount : slideCount - slidesToShow + 1,
+    currentStep,
+    goToStep: setIndex,
     slides: (
       <div style={{ width: "100%", overflow: "hidden" }}>
         <div
