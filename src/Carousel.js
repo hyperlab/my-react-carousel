@@ -10,7 +10,14 @@ import React, {
 import useTouch from "./useTouch";
 
 const Carousel = (
-  { children, slidesToShow = 3, infinite = true, transitionDuration = 300 },
+  {
+    children,
+    slidesToShow = 3,
+    infinite = true,
+    transitionDuration = 300,
+    centerCurrentSlide = false,
+    render = ({ slides }) => slides
+  },
   ref
 ) => {
   const [currentIndex, setIndex] = React.useState(0);
@@ -99,8 +106,6 @@ const Carousel = (
               if (infinite) return slideCount + index;
               return 0;
             } else {
-              if (index >= slideCount - slidesToShow)
-                return slideCount - slidesToShow;
               return index - slideCount;
             }
           })
@@ -137,41 +142,56 @@ const Carousel = (
               return 0;
             }
             return prevIndex - slides;
-          })
+          });
         }
-        
       },
       [itemWidth]
     )
   );
 
   const preSlidesCount = infinite ? slidesToShow : 0;
-  const offset = touchOffset - (currentIndex + preSlidesCount) * itemWidth;
+  const offset =
+    touchOffset -
+    (currentIndex + preSlidesCount) * itemWidth +
+    (centerCurrentSlide ? itemWidth / 2 + (slidesToShow / 2 - 1) * itemWidth : 0);
   const transition = disableTransition || isTouching ? 0 : transitionDuration;
+  const currentSlide =
+    currentIndex >= slideCount
+      ? currentIndex - slideCount
+      : currentIndex < 0
+      ? currentIndex + slideCount
+      : currentIndex;
 
-  return (
-    <div style={{ width: "100%", overflow: "hidden" }}>
-      <div
-        ref={inner}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        onMouseMove={onTouchMove}
-        onMouseDown={onTouchStart}
-        onMouseUp={onTouchEnd}
-        onMouseLeave={onTouchEnd}
-        onClick={onClick}
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          transform: `translateX(${offset}px)`,
-          transition: `transform ${transition}ms ease`
-        }}
-      >
-        {slides}
+  return render({
+    next,
+    previous,
+    totalSlides: slideCount,
+    currentSlide,
+    goToSlide: setIndex,
+    slides: (
+      <div style={{ width: "100%", overflow: "hidden" }}>
+        <div
+          ref={inner}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          onMouseMove={onTouchMove}
+          onMouseDown={onTouchStart}
+          onMouseUp={onTouchEnd}
+          onMouseLeave={onTouchEnd}
+          onClick={onClick}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            transform: `translateX(${offset}px)`,
+            transition: `transform ${transition}ms ease`
+          }}
+        >
+          {slides}
+        </div>
       </div>
-    </div>
-  );
+    )
+  });
 };
 
 export default forwardRef(Carousel);
