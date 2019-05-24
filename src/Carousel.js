@@ -129,20 +129,20 @@ const Carousel = (
   } = useTouch(
     useCallback(
       offset => {
-        const slides = Math.round(offset / itemWidth);
+        const slidesMoved = Math.round(offset / itemWidth);
         if (infinite) {
           setIndex(index => index - slides);
         } else {
           setIndex(prevIndex => {
             if (
-              prevIndex + (-1 * offset) / itemWidth >
+              prevIndex - slidesMoved >
               slideCount - slidesToShow
             )
               return slideCount - slidesToShow;
-            if (prevIndex - offset / itemWidth < 0) {
+            if (prevIndex - slidesMoved < 0) {
               return 0;
             }
-            return prevIndex - slides;
+            return prevIndex - slidesMoved;
           });
         }
       },
@@ -156,17 +156,19 @@ const Carousel = (
   const offset =
     touchOffset - (currentIndex + preSlidesCount) * itemWidth + centeringOffset;
   const transition = disableTransition || isTouching ? 0 : transitionDuration;
+
   const currentStep =
     currentIndex >= slideCount
       ? currentIndex - slideCount
       : currentIndex < 0
       ? currentIndex + slideCount
       : currentIndex;
+  const totalSteps = infinite ? slideCount : slideCount - slidesToShow + 1;
 
   return render({
     next,
     previous,
-    totalSteps: infinite ? slideCount : slideCount - slidesToShow + 1,
+    totalSteps,
     currentStep,
     goToStep: setIndex,
     slides: (
