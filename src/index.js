@@ -54,8 +54,6 @@ const dotsRenderer = ({ slides, currentStep, totalSteps, goToStep }) => {
 };
 
 function App() {
-  const carousel = useRef(null);
-
   return (
     <div className="App">
       <h1>Hello CodeSandbox</h1>
@@ -63,6 +61,7 @@ function App() {
       <Carousel
         render={dotsRenderer}
         slidesToShow={2}
+        infinite={false}
       >
         <div className="slide">Slide 1</div>
         <div className="slide">Slide 2</div>
