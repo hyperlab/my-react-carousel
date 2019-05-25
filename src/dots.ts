@@ -4,6 +4,7 @@ import { ReactElement } from "react";
 export interface Dot {
   index: number;
   onClick: () => void;
+  isActive: boolean;
 }
 
 export interface RenderPropsWithDots extends RenderProps {
@@ -34,7 +35,8 @@ export function generateDots(
     const { currentStep, totalSteps, goToStep } = props;
     const dots = Array.from(Array(totalSteps)).map((_, index) => ({
       index,
-      onClick: () => goToStep(findClosestPath(currentStep, index, totalSteps))
+      onClick: () => goToStep(findClosestPath(currentStep, index, totalSteps)),
+      isActive: index === currentStep
     }));
 
     return render({

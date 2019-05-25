@@ -15,6 +15,8 @@ export interface RenderProps {
   slides: ReactElement;
   next: () => void;
   previous: () => void;
+  hasNext: boolean;
+  hasPrevious: boolean;
   totalSteps: number;
   currentStep: number;
   goToStep: (index: number) => void;
@@ -185,6 +187,8 @@ const Carousel: FC<CarouselProps> = (
   return render({
     next,
     previous,
+    hasNext: infinite ? true : currentIndex + slidesToShow < slideCount,
+    hasPrevious: infinite ? true : currentIndex > 0,
     totalSteps,
     currentStep,
     goToStep: setIndex,
