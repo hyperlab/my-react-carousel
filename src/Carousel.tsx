@@ -5,20 +5,40 @@ import React, {
   useCallback,
   useMemo,
   forwardRef,
-  useImperativeHandle
+  useImperativeHandle,
+  ReactElement,
+  FC
 } from "react";
 import useTouch from "./useTouch";
 
-const Carousel = (
+export interface RenderProps {
+  slides: ReactElement;
+  next: () => void;
+  previous: () => void;
+  totalSteps: number;
+  currentStep: number;
+  goToStep: (index: number) => void;
+}
+
+export interface CarouselProps {
+  children: ReactElement;
+  slidesToShow: number;
+  infinite: boolean;
+  transitionDuration: number;
+  centerCurrentSlide: boolean;
+  render: (props: RenderProps) => ReactElement;
+}
+
+const Carousel: FC<CarouselProps> = (
   {
     children,
     slidesToShow = 3,
     infinite = true,
     transitionDuration = 300,
     centerCurrentSlide = false,
-    render = ({ slides }) => slides
+    render = ({ slides }: RenderProps) => slides
   },
-  ref
+  ref: () => void
 ) => {
   const [currentIndex, setIndex] = React.useState(0);
 
@@ -34,7 +54,7 @@ const Carousel = (
       : [];
 
     const slides = [...preSlides, ...originalSlides, ...postSlides].map(
-      (child, index) =>
+      (child: ReactElement, index) =>
         React.cloneElement(child, {
           style: {
             flex: `0 0 ${100 / slidesToShow}%`
@@ -131,13 +151,10 @@ const Carousel = (
       offset => {
         const slidesMoved = Math.round(offset / itemWidth);
         if (infinite) {
-          setIndex(index => index - slides);
+          setIndex(index => index - slidesMoved);
         } else {
           setIndex(prevIndex => {
-            if (
-              prevIndex - slidesMoved >
-              slideCount - slidesToShow
-            )
+            if (prevIndex - slidesMoved > slideCount - slidesToShow)
               return slideCount - slidesToShow;
             if (prevIndex - slidesMoved < 0) {
               return 0;

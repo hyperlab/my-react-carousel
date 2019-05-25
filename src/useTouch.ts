@@ -1,23 +1,31 @@
-import { useState, useCallback } from "react";
+import {
+  useState,
+  useCallback,
+  TouchEvent as ReactTouchEvent,
+  MouseEvent as ReactMouseEvent
+} from "react";
 
-function useTouch(callback) {
+function useTouch(callback: (offset: number) => void) {
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchOffset, setTouchOffset] = useState(0);
 
-  const onTouchStart = useCallback(event => {
-    const x = event.changedTouches
-      ? event.changedTouches[0].clientX
-      : event.clientX;
+  const onTouchStart = useCallback(
+    (event: ReactTouchEvent | ReactMouseEvent) => {
+      const x = (event as ReactTouchEvent).changedTouches
+        ? (event as ReactTouchEvent).changedTouches[0].clientX
+        : (event as ReactMouseEvent).clientX;
 
-    setTouchStartX(x);
-  }, []);
+      setTouchStartX(x);
+    },
+    []
+  );
 
   const onTouchMove = useCallback(
-    event => {
+    (event: ReactTouchEvent | ReactMouseEvent) => {
       if (touchStartX !== null) {
-        const x = event.changedTouches
-          ? event.changedTouches[0].clientX
-          : event.clientX;
+        const x = (event as ReactTouchEvent).changedTouches
+          ? (event as ReactTouchEvent).changedTouches[0].clientX
+          : (event as ReactMouseEvent).clientX;
 
         setTouchOffset(x - touchStartX);
       }
