@@ -196,3 +196,5 @@ Contributions are always appreciated!
 ## Development
 
 To build this module, run `yarn build`.
+
+To start the test runner, run `yarn test`.
