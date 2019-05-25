@@ -27,6 +27,8 @@
     "lint-staged": "^8.1.5",
     "prettier": "^1.16.4",
     "react": "^16.8.4",
+    "react-dom": "^16.8.6",
+    "react-testing-library": "^7.0.1",
     "rollup": "^1.12.3",
     "rollup-plugin-terser": "^5.0.0",
     "rollup-plugin-typescript2": "^0.21.1",
