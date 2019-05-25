@@ -1,18 +1,8 @@
-import React, {
-  useEffect,
-  useState,
-  useLayoutEffect,
-  useCallback,
-  useMemo,
-  forwardRef,
-  useImperativeHandle,
-  ReactElement,
-  FC
-} from "react";
+import { default as React } from "react";
 import useTouch from "./useTouch";
 
 export interface RenderProps {
-  slides: ReactElement;
+  slides: React.ReactElement;
   next: () => void;
   previous: () => void;
   hasNext: boolean;
@@ -23,15 +13,15 @@ export interface RenderProps {
 }
 
 export interface CarouselProps {
-  children: ReactElement;
+  children: React.ReactElement;
   slidesToShow: number;
   infinite: boolean;
   transitionDuration: number;
   centerCurrentSlide: boolean;
-  render: (props: RenderProps) => ReactElement;
+  render: (props: RenderProps) => React.ReactElement;
 }
 
-const Carousel: FC<CarouselProps> = (
+const Carousel: React.FC<CarouselProps> = (
   {
     children,
     slidesToShow = 3,
@@ -44,7 +34,7 @@ const Carousel: FC<CarouselProps> = (
 ) => {
   const [currentIndex, setIndex] = React.useState(0);
 
-  const { slides, slideCount, preSlidesCount } = useMemo(() => {
+  const { slides, slideCount, preSlidesCount } = React.useMemo(() => {
     const originalSlides = React.Children.toArray(children);
     const slideCount = originalSlides.length;
 
@@ -56,7 +46,7 @@ const Carousel: FC<CarouselProps> = (
       : [];
 
     const slides = [...preSlides, ...originalSlides, ...postSlides].map(
-      (child: ReactElement, index) =>
+      (child: React.ReactElement, index) =>
         React.cloneElement(child, {
           style: {
             flex: `0 0 ${100 / slidesToShow}%`
@@ -72,7 +62,7 @@ const Carousel: FC<CarouselProps> = (
     };
   }, [children, infinite, slidesToShow]);
 
-  const previous = useCallback(
+  const previous = React.useCallback(
     () =>
       setIndex(index => {
         if (infinite || index - 1 >= 0) return index - 1;
@@ -80,7 +70,7 @@ const Carousel: FC<CarouselProps> = (
       }),
     [infinite]
   );
-  const next = useCallback(
+  const next = React.useCallback(
     () =>
       setIndex(index => {
         if (infinite || index + 1 < slideCount - slidesToShow) return index + 1;
@@ -89,7 +79,7 @@ const Carousel: FC<CarouselProps> = (
     [infinite, slideCount, slidesToShow]
   );
 
-  useImperativeHandle(
+  React.useImperativeHandle(
     ref,
     () => ({
       previous,
@@ -99,9 +89,9 @@ const Carousel: FC<CarouselProps> = (
   );
 
   const inner = React.useRef(null);
-  const [itemWidth, setItemWidth] = useState(0);
+  const [itemWidth, setItemWidth] = React.useState(0);
 
-  const updateItemWidth = useCallback(
+  const updateItemWidth = React.useCallback(
     () =>
       requestAnimationFrame(() => {
         if (inner.current) {
@@ -112,15 +102,15 @@ const Carousel: FC<CarouselProps> = (
     [slidesToShow]
   );
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     updateItemWidth();
     window.addEventListener("resize", updateItemWidth);
     return () => window.removeEventListener("resize", updateItemWidth);
   }, [updateItemWidth]);
 
-  const [disableTransition, setDisableTransition] = useState(false);
+  const [disableTransition, setDisableTransition] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (disableTransition) {
       if (currentIndex < 0 || currentIndex >= slideCount) {
         requestAnimationFrame(() =>
@@ -149,7 +139,7 @@ const Carousel: FC<CarouselProps> = (
     touchOffset,
     onClick
   } = useTouch(
-    useCallback(
+    React.useCallback(
       offset => {
         const slidesMoved = Math.round(offset / itemWidth);
         if (infinite) {
@@ -218,4 +208,4 @@ const Carousel: FC<CarouselProps> = (
   });
 };
 
-export default forwardRef(Carousel);
+export default React.forwardRef(Carousel);
