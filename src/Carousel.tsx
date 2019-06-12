@@ -90,12 +90,14 @@ const Carousel: React.FC<CarouselProps> = (
 
   const inner = React.useRef(null);
   const [itemWidth, setItemWidth] = React.useState(0);
+  const [disableTransition, setDisableTransition] = React.useState(false);
 
   const updateItemWidth = React.useCallback(
     () =>
       requestAnimationFrame(() => {
         if (inner.current) {
           const { width } = inner.current.getBoundingClientRect();
+          setDisableTransition(true);
           setItemWidth(Math.round(width / slidesToShow));
         }
       }),
@@ -107,8 +109,6 @@ const Carousel: React.FC<CarouselProps> = (
     window.addEventListener("resize", updateItemWidth);
     return () => window.removeEventListener("resize", updateItemWidth);
   }, [updateItemWidth]);
-
-  const [disableTransition, setDisableTransition] = React.useState(false);
 
   React.useEffect(() => {
     if (disableTransition) {
