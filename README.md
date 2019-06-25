@@ -161,7 +161,7 @@ This sets the duration of the animation when browsing between slides.
 
 ### render (props => ReactElement)
 
-The render API is a way to extend the Carousel from the standard behaviour. Whatever you return from this function is what will be rendered in the DOM. These are the props passed to the render function:
+The render API is a way to extend the Carousel from the standard behaviour. Whatever you return from this function is what will be rendered in the DOM. These are the props passed to the render function, in addition to the config settings above which is also passed:
 
 #### slides (ReactElement)
 

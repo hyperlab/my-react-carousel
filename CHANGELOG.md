@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2019-06-25
+
 ### Fixed
 
 - Don't change index when drag stops and you haven't moved if total slides is less than slides to show.
@@ -32,7 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.1.0...master
+[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.2.0...master
+[1.2.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/hyperlab/my-react-carousel/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/hyperlab/my-react-carousel/commits/v1.0.0
