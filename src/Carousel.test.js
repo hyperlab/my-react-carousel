@@ -143,5 +143,34 @@ describe("Carousel", () => {
       act(triggerNext);
       expect(current).toBe(2);
     });
+
+    it("provides the options passed as props to the render function", () => {
+      const infinite = false;
+      const slidesToShow = 2;
+      const centerCurrentSlide = true;
+      const transitionDuration = 150;
+
+      const renderer = jest.fn(() => null);
+
+      render(
+        <Carousel
+          infinite={infinite}
+          slidesToShow={slidesToShow}
+          centerCurrentSlide={centerCurrentSlide}
+          transitionDuration={transitionDuration}
+          render={renderer}
+        />
+      );
+
+      expect(renderer).toHaveBeenCalledTimes(1);
+      expect(renderer).toHaveBeenCalledWith(
+        expect.objectContaining({
+          infinite,
+          slidesToShow,
+          centerCurrentSlide,
+          transitionDuration
+        })
+      );
+    });
   });
 });

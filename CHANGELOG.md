@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Don't change index when drag stops and you haven't moved if total slides is less than slides to show.
+- Make sure dots work as expected in non-infinite mode.
+
 ## [1.1.0] - 2019-06-12
 
 ### Added

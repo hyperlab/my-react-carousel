@@ -32,10 +32,13 @@ export function generateDots(
   render: (props: RenderPropsWithDots) => ReactElement
 ) {
   return (props: RenderProps) => {
-    const { currentStep, totalSteps, goToStep } = props;
+    const { currentStep, totalSteps, goToStep, infinite } = props;
     const dots = Array.from(Array(totalSteps)).map((_, index) => ({
       index,
-      onClick: () => goToStep(findClosestPath(currentStep, index, totalSteps)),
+      onClick: () =>
+        goToStep(
+          infinite ? findClosestPath(currentStep, index, totalSteps) : index
+        ),
       isActive: index === currentStep
     }));
 

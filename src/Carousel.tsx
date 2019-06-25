@@ -10,6 +10,10 @@ export interface RenderProps {
   totalSteps: number;
   currentStep: number;
   goToStep: (index: number) => void;
+  slidesToShow: number;
+  infinite: boolean;
+  transitionDuration: number;
+  centerCurrentSlide: boolean;
 }
 
 export interface CarouselProps {
@@ -145,6 +149,7 @@ const Carousel: React.FC<CarouselProps> = (
         if (infinite) {
           setIndex(index => index - slidesMoved);
         } else {
+          if (slidesMoved === 0) return;
           setIndex(prevIndex => {
             if (prevIndex - slidesMoved > slideCount - slidesToShow)
               return slideCount - slidesToShow;
@@ -204,7 +209,11 @@ const Carousel: React.FC<CarouselProps> = (
           {slides}
         </div>
       </div>
-    )
+    ),
+    slidesToShow,
+    infinite,
+    transitionDuration,
+    centerCurrentSlide
   });
 };
 

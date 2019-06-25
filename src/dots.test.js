@@ -65,7 +65,8 @@ describe("generateDots", () => {
     generateDots(render)({
       currentStep: 0,
       totalSteps: 3,
-      goToStep
+      goToStep,
+      infinite: true
     });
 
     expect(render).toHaveBeenCalledTimes(1);
@@ -73,5 +74,24 @@ describe("generateDots", () => {
     expect(goToStep).toHaveBeenNthCalledWith(1, 0);
     expect(goToStep).toHaveBeenNthCalledWith(2, 1);
     expect(goToStep).toHaveBeenNthCalledWith(3, -1);
+  });
+
+  it("goes straight to the selected index if infinite mode is disabled", () => {
+    const goToStep = jest.fn();
+    const render = jest.fn(({ dots }) =>
+      dots.forEach(({ onClick }) => onClick())
+    );
+    generateDots(render)({
+      currentStep: 0,
+      totalSteps: 3,
+      goToStep,
+      infinite: false
+    });
+
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(goToStep).toHaveBeenCalledTimes(3);
+    expect(goToStep).toHaveBeenNthCalledWith(1, 0);
+    expect(goToStep).toHaveBeenNthCalledWith(2, 1);
+    expect(goToStep).toHaveBeenNthCalledWith(3, 2);
   });
 });
