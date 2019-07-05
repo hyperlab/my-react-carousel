@@ -1,4 +1,5 @@
 import { default as React } from "react";
+import { isIosDevice } from "./isIosDevice";
 
 const overflowClass = "my-react-carousel-prevent-overflow";
 const styling = `
@@ -7,7 +8,7 @@ const styling = `
   }
 `;
 
-const preventDefault = (e: TouchEvent) => e.preventDefault();
+const preventDefault = (e: TouchEvent) => e.cancelable && e.preventDefault();
 
 function useTouch(callback: (offset: number) => void) {
   React.useEffect(() => {
@@ -32,18 +33,22 @@ function useTouch(callback: (offset: number) => void) {
         : (event as React.MouseEvent).clientX;
 
       if (
-        (event as React.TouchEvent).touches &&
-        (event as React.TouchEvent).touches.length > 1
+        (event as React.TouchEvent).targetTouches &&
+        (event as React.TouchEvent).targetTouches.length > 1
       ) {
         // Multiple touch points indicates an attempt to pinch-to-zoom
         return null;
       }
 
-      event.stopPropagation();
+      if (isIosDevice) {
+        event.stopPropagation();
+        document.addEventListener("touchmove", preventDefault, {
+          passive: false
+        });
+      }
 
       setTouchStartX(x);
       document.body.classList.add(overflowClass);
-      document.addEventListener("touchmove", preventDefault);
     },
     []
   );
@@ -66,7 +71,10 @@ function useTouch(callback: (offset: number) => void) {
     setTouchStartX(null);
     setTimeout(() => setTouchOffset(0), 0);
     document.body.classList.remove(overflowClass);
-    document.removeEventListener("touchmove", preventDefault);
+
+    if (isIosDevice) {
+      document.removeEventListener("touchmove", preventDefault);
+    }
   }, [touchOffset, callback]);
 
   const onClick = React.useCallback(
