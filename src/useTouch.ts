@@ -29,6 +29,14 @@ function useTouch(callback: (offset: number) => void) {
         ? (event as React.TouchEvent).changedTouches[0].clientX
         : (event as React.MouseEvent).clientX;
 
+      if (
+        (event as React.TouchEvent).touches &&
+        (event as React.TouchEvent).touches.length > 1
+      ) {
+        // Multiple touch points indicates an attempt to pinch-to-zoom
+        return null;
+      }
+
       setTouchStartX(x);
       document.body.classList.add(overflowClass);
     },
