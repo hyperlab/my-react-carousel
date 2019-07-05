@@ -145,7 +145,10 @@ const Carousel: React.FC<CarouselProps> = (
   } = useTouch(
     React.useCallback(
       offset => {
-        const slidesMoved = Math.round(offset / itemWidth);
+        // Make it a bit easier to switch slides by adding 30% of item width to the offset
+        const adjustedOffset =
+          offset > 0 ? offset + itemWidth * 0.3 : offset - itemWidth * 0.3;
+        const slidesMoved = Math.round(adjustedOffset / itemWidth);
         if (infinite) {
           setIndex(index => index - slidesMoved);
         } else {
