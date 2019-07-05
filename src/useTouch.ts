@@ -7,6 +7,8 @@ const styling = `
   }
 `;
 
+const preventDefault = (e: TouchEvent) => e.preventDefault();
+
 function useTouch(callback: (offset: number) => void) {
   React.useEffect(() => {
     const style = document.createElement("style");
@@ -37,8 +39,11 @@ function useTouch(callback: (offset: number) => void) {
         return null;
       }
 
+      event.stopPropagation();
+
       setTouchStartX(x);
       document.body.classList.add(overflowClass);
+      document.addEventListener("touchmove", preventDefault);
     },
     []
   );
@@ -61,6 +66,7 @@ function useTouch(callback: (offset: number) => void) {
     setTouchStartX(null);
     setTimeout(() => setTouchOffset(0), 0);
     document.body.classList.remove(overflowClass);
+    document.removeEventListener("touchmove", preventDefault);
   }, [touchOffset, callback]);
 
   const onClick = React.useCallback(
