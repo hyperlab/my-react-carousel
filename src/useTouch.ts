@@ -1,37 +1,29 @@
 import { default as React } from "react";
-import { isIosDevice } from "./isIosDevice";
-
-const overflowClass = "my-react-carousel-prevent-overflow";
-const styling = `
-  body.${overflowClass} {
-    overflow: hidden;
-  }
-`;
-
-const preventDefault = (e: TouchEvent) => e.cancelable && e.preventDefault();
 
 function useTouch(callback: (offset: number) => void) {
-  React.useEffect(() => {
-    const style = document.createElement("style");
-    style.type = "text/css";
-    style.appendChild(document.createTextNode(styling));
-
-    document.body.appendChild(style);
-    return () => {
-      document.body.classList.remove(overflowClass);
-      document.body.removeChild(style);
-    };
-  }, []);
-
   const [touchStartX, setTouchStartX] = React.useState(null);
+  const [touchStartY, setTouchStartY] = React.useState(null);
   const [touchOffset, setTouchOffset] = React.useState(0);
+  const [isSwiping, setIsSwiping] = React.useState(false);
+
+  React.useEffect(() => {
+    const preventDefault = (event: TouchEvent) => {
+      if (isSwiping && event.cancelable) {
+        event.preventDefault();
+        event.returnValue = false;
+        return false;
+      }
+    };
+
+    document.addEventListener("touchmove", preventDefault, {
+      passive: false
+    });
+
+    return () => document.removeEventListener("touchmove", preventDefault);
+  }, [isSwiping]);
 
   const onTouchStart = React.useCallback(
     (event: React.TouchEvent | React.MouseEvent) => {
-      const x = (event as React.TouchEvent).changedTouches
-        ? (event as React.TouchEvent).changedTouches[0].clientX
-        : (event as React.MouseEvent).clientX;
-
       if (
         (event as React.TouchEvent).targetTouches &&
         (event as React.TouchEvent).targetTouches.length > 1
@@ -40,15 +32,15 @@ function useTouch(callback: (offset: number) => void) {
         return null;
       }
 
-      if (isIosDevice) {
-        event.stopPropagation();
-        document.addEventListener("touchmove", preventDefault, {
-          passive: false
-        });
-      }
+      const x = (event as React.TouchEvent).changedTouches
+        ? (event as React.TouchEvent).changedTouches[0].clientX
+        : (event as React.MouseEvent).clientX;
+      const y = (event as React.TouchEvent).changedTouches
+        ? (event as React.TouchEvent).changedTouches[0].clientY
+        : (event as React.MouseEvent).clientY;
 
       setTouchStartX(x);
-      document.body.classList.add(overflowClass);
+      setTouchStartY(y);
     },
     []
   );
@@ -59,22 +51,33 @@ function useTouch(callback: (offset: number) => void) {
         const x = (event as React.TouchEvent).changedTouches
           ? (event as React.TouchEvent).changedTouches[0].clientX
           : (event as React.MouseEvent).clientX;
+        const y = (event as React.TouchEvent).changedTouches
+          ? (event as React.TouchEvent).changedTouches[0].clientY
+          : (event as React.MouseEvent).clientY;
 
-        setTouchOffset(x - touchStartX);
+        const diffX = x - touchStartX;
+        const diffY = y - touchStartY;
+
+        setTouchOffset(diffX);
+        if (!isSwiping) {
+          if (Math.abs(diffY) > 10) {
+            setTouchStartX(null);
+            setTouchStartY(null);
+            setTouchOffset(0);
+          } else {
+            setIsSwiping(Math.abs(diffX) > 5);
+          }
+        }
       }
     },
-    [touchStartX]
+    [touchStartX, isSwiping]
   );
 
   const onTouchEnd = React.useCallback(() => {
     callback(touchOffset);
     setTouchStartX(null);
+    setIsSwiping(false);
     setTimeout(() => setTouchOffset(0), 0);
-    document.body.classList.remove(overflowClass);
-
-    if (isIosDevice) {
-      document.removeEventListener("touchmove", preventDefault);
-    }
   }, [touchOffset, callback]);
 
   const onClick = React.useCallback(
