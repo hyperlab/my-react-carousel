@@ -98,15 +98,15 @@ const Carousel: React.FC<CarouselProps> = (
     [previous, next]
   );
 
-  const inner = React.useRef(null);
+  const wrapper = React.useRef(null);
   const [itemSize, setItemSize] = React.useState(0);
   const [disableTransition, setDisableTransition] = React.useState(false);
 
   const updateItemSize = React.useCallback(
     () =>
       requestAnimationFrame(() => {
-        if (inner.current) {
-          const { width, height } = inner.current.getBoundingClientRect();
+        if (wrapper.current) {
+          const { width, height } = wrapper.current.getBoundingClientRect();
           setDisableTransition(true);
           setItemSize(Math.round((horizontal ? width : height) / slidesToShow));
         }
@@ -170,8 +170,7 @@ const Carousel: React.FC<CarouselProps> = (
         }
       },
       [itemSize]
-    ),
-    direction
+    )
   );
 
   const centeringOffset = centerCurrentSlide
@@ -189,6 +188,18 @@ const Carousel: React.FC<CarouselProps> = (
       : currentIndex;
   const totalSteps = infinite ? slideCount : slideCount - slidesToShow + 1;
 
+  const touchProps = horizontal
+    ? {
+        onTouchStart,
+        onTouchMove,
+        onTouchEnd,
+        onMouseDown: onTouchStart,
+        onMouseMove: onTouchMove,
+        onMouseUp: onTouchEnd,
+        onMouseLeave: onTouchEnd
+      }
+    : {};
+
   return render({
     next,
     previous,
@@ -204,16 +215,10 @@ const Carousel: React.FC<CarouselProps> = (
           height: horizontal ? "auto" : "100%",
           overflow: "hidden"
         }}
+        ref={wrapper}
       >
         <div
-          ref={inner}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onMouseMove={onTouchMove}
-          onMouseDown={onTouchStart}
-          onMouseUp={onTouchEnd}
-          onMouseLeave={onTouchEnd}
+          {...touchProps}
           onClick={onClick}
           style={{
             display: "flex",
