@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2019-07-10
+
+### Fixed
+
+- Problems with pinch-to-zoom interactions
+- Decrease amount of re-renders triggered by useTouch hook
+
 ## [1.3.0] - 2019-07-10
 
 ### Added
