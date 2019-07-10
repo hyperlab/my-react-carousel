@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2019-07-10
+
+### Added
+
+- Use touch prevention instead of applying `overflow: hidden` to prevent vertical scrolling
+- Add offset to swiping to make it easier to switch slides
+
+### Fixed
+
+- No longer prevents pinch-to-zoom interactions
+
 ## [1.2.0] - 2019-06-25
 
 ### Fixed
@@ -34,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.2.0...master
+[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.0...master
+[1.3.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/hyperlab/my-react-carousel/compare/v1.0.0...v1.0.1
