@@ -1,6 +1,8 @@
 import { default as React } from "react";
 import useTouch from "./useTouch";
 
+export type Direction = "horizontal" | "vertical";
+
 export interface RenderProps {
   slides: React.ReactElement;
   next: () => void;
@@ -22,6 +24,7 @@ export interface CarouselProps {
   infinite: boolean;
   transitionDuration: number;
   centerCurrentSlide: boolean;
+  direction: Direction;
   render: (props: RenderProps) => React.ReactElement;
 }
 
@@ -32,10 +35,13 @@ const Carousel: React.FC<CarouselProps> = (
     infinite = true,
     transitionDuration = 300,
     centerCurrentSlide = false,
-    render = ({ slides }: RenderProps) => slides
+    render = ({ slides }: RenderProps) => slides,
+    direction = "horizontal"
   },
   ref: () => void
 ) => {
+  const horizontal = direction === "horizontal";
+
   const [currentIndex, setIndex] = React.useState(0);
 
   const { slides, slideCount, preSlidesCount } = React.useMemo(() => {
@@ -93,26 +99,26 @@ const Carousel: React.FC<CarouselProps> = (
   );
 
   const inner = React.useRef(null);
-  const [itemWidth, setItemWidth] = React.useState(0);
+  const [itemSize, setItemSize] = React.useState(0);
   const [disableTransition, setDisableTransition] = React.useState(false);
 
-  const updateItemWidth = React.useCallback(
+  const updateItemSize = React.useCallback(
     () =>
       requestAnimationFrame(() => {
         if (inner.current) {
-          const { width } = inner.current.getBoundingClientRect();
+          const { width, height } = inner.current.getBoundingClientRect();
           setDisableTransition(true);
-          setItemWidth(Math.round(width / slidesToShow));
+          setItemSize(Math.round((horizontal ? width : height) / slidesToShow));
         }
       }),
     [slidesToShow]
   );
 
   React.useLayoutEffect(() => {
-    updateItemWidth();
-    window.addEventListener("resize", updateItemWidth);
-    return () => window.removeEventListener("resize", updateItemWidth);
-  }, [updateItemWidth]);
+    updateItemSize();
+    window.addEventListener("resize", updateItemSize);
+    return () => window.removeEventListener("resize", updateItemSize);
+  }, [updateItemSize]);
 
   React.useEffect(() => {
     if (disableTransition) {
@@ -145,10 +151,10 @@ const Carousel: React.FC<CarouselProps> = (
   } = useTouch(
     React.useCallback(
       offset => {
-        // Make it a bit easier to switch slides by adding 30% of item width to the offset
+        // Make it a bit easier to switch slides by adding 30% of item size to the offset
         const adjustedOffset =
-          offset > 0 ? offset + itemWidth * 0.3 : offset - itemWidth * 0.3;
-        const slidesMoved = Math.round(adjustedOffset / itemWidth);
+          offset > 0 ? offset + itemSize * 0.3 : offset - itemSize * 0.3;
+        const slidesMoved = Math.round(adjustedOffset / itemSize);
         if (infinite) {
           setIndex(index => index - slidesMoved);
         } else {
@@ -163,15 +169,16 @@ const Carousel: React.FC<CarouselProps> = (
           });
         }
       },
-      [itemWidth]
-    )
+      [itemSize]
+    ),
+    direction
   );
 
   const centeringOffset = centerCurrentSlide
-    ? (slidesToShow / 2 - 0.5) * itemWidth
+    ? (slidesToShow / 2 - 0.5) * itemSize
     : 0;
   const offset =
-    touchOffset - (currentIndex + preSlidesCount) * itemWidth + centeringOffset;
+    touchOffset - (currentIndex + preSlidesCount) * itemSize + centeringOffset;
   const transition = disableTransition || isTouching ? 0 : transitionDuration;
 
   const currentStep =
@@ -191,7 +198,13 @@ const Carousel: React.FC<CarouselProps> = (
     currentStep,
     goToStep: setIndex,
     slides: (
-      <div style={{ width: "100%", overflow: "hidden" }}>
+      <div
+        style={{
+          width: horizontal ? "100%" : "auto",
+          height: horizontal ? "auto" : "100%",
+          overflow: "hidden"
+        }}
+      >
         <div
           ref={inner}
           onTouchStart={onTouchStart}
@@ -204,8 +217,10 @@ const Carousel: React.FC<CarouselProps> = (
           onClick={onClick}
           style={{
             display: "flex",
-            flexDirection: "row",
-            transform: `translateX(${offset}px)`,
+            flexDirection: horizontal ? "row" : "column",
+            transform: horizontal
+              ? `translateX(${offset}px)`
+              : `translateY(${offset}px)`,
             transition: `transform ${transition}ms ease`
           }}
         >
