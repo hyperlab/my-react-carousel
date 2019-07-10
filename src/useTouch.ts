@@ -86,7 +86,7 @@ function useTouch(callback: (offset: number) => void) {
         }
       }
     },
-    [touchStartX, touchStartY, isSwiping]
+    [touchStartX, isSwiping]
   );
 
   const onTouchEnd = React.useCallback(() => {
