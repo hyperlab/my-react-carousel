@@ -1,8 +1,7 @@
 import { default as React } from "react";
-import useTouch from "./useTouch";
 import useFlexedSlides from "./useFlexedSlides";
-import useNavigation from "./useNavigation";
 import useFlexedItemSize from "./useFlexedItemSize";
+import useNavigation from "./useNavigation";
 
 export interface RenderProps {
   slides: React.ReactElement;
@@ -16,25 +15,22 @@ export interface RenderProps {
   slidesToShow: number;
   infinite: boolean;
   transitionDuration: number;
-  centerCurrentSlide: boolean;
 }
 
-export interface CarouselProps {
+export interface VerticalCarouselProps {
   children: React.ReactElement;
   slidesToShow: number;
   infinite: boolean;
   transitionDuration: number;
-  centerCurrentSlide: boolean;
   render: (props: RenderProps) => React.ReactElement;
 }
 
-const Carousel: React.FC<CarouselProps> = (
+const VerticalCarousel: React.FC<VerticalCarouselProps> = (
   {
     children,
     slidesToShow = 3,
     infinite = true,
     transitionDuration = 300,
-    centerCurrentSlide = false,
     render = ({ slides }: RenderProps) => slides
   },
   ref: () => void
@@ -72,7 +68,7 @@ const Carousel: React.FC<CarouselProps> = (
       setItemSize(size);
     },
     slidesToShow,
-    measure: "width"
+    measure: "height"
   });
 
   React.useEffect(() => {
@@ -96,68 +92,25 @@ const Carousel: React.FC<CarouselProps> = (
     }
   }, [disableTransition, currentIndex, slideCount, transitionDuration]);
 
-  const {
-    onTouchStart,
-    onTouchMove,
-    onTouchEnd,
-    isTouching,
-    touchOffset,
-    onClick
-  } = useTouch(
-    React.useCallback(
-      offset => {
-        // Make it a bit easier to switch slides by adding 30% of item size to the offset
-        const adjustedOffset =
-          offset > 0 ? offset + itemSize * 0.3 : offset - itemSize * 0.3;
-        const slidesMoved = Math.round(adjustedOffset / itemSize);
-        if (infinite) {
-          navigation.goToStep(index => index - slidesMoved);
-        } else {
-          if (slidesMoved === 0) return;
-          navigation.goToStep(prevIndex => {
-            if (prevIndex - slidesMoved > slideCount - slidesToShow)
-              return slideCount - slidesToShow;
-            if (prevIndex - slidesMoved < 0) {
-              return 0;
-            }
-            return prevIndex - slidesMoved;
-          });
-        }
-      },
-      [itemSize]
-    )
-  );
-
-  const centeringOffset = centerCurrentSlide
-    ? (slidesToShow / 2 - 0.5) * itemSize
-    : 0;
-  const offset =
-    touchOffset - (currentIndex + preSlidesCount) * itemSize + centeringOffset;
-  const transition = disableTransition || isTouching ? 0 : transitionDuration;
+  const offset = (currentIndex + preSlidesCount) * itemSize;
+  const transition = disableTransition || transitionDuration;
 
   return render({
     ...navigation,
     slides: (
       <div
         style={{
-          width: "100%",
+          width: "auto",
+          height: "100%",
           overflow: "hidden"
         }}
         ref={wrapper}
       >
         <div
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onMouseDown={onTouchStart}
-          onMouseMove={onTouchMove}
-          onMouseUp={onTouchEnd}
-          onMouseLeave={onTouchEnd}
-          onClick={onClick}
           style={{
             display: "flex",
-            flexDirection: "row",
-            transform: `translateX(${offset}px)`,
+            flexDirection: "column",
+            transform: `translateY(${offset}px)`,
             transition: `transform ${transition}ms ease`
           }}
         >
@@ -167,9 +120,8 @@ const Carousel: React.FC<CarouselProps> = (
     ),
     slidesToShow,
     infinite,
-    transitionDuration,
-    centerCurrentSlide
+    transitionDuration
   });
 };
 
-export default React.forwardRef(Carousel);
+export default React.forwardRef(VerticalCarousel);
