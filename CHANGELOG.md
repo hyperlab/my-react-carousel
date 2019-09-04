@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.3] - 2019-07-11
+
+- Upgrade dependencies due to security vulnerability.
+
+## [1.3.2] - 2019-07-11
+
+- Further improvements to scroll prevention
+
+## [1.3.1] - 2019-07-10
+
+### Fixed
+
+- Problems with pinch-to-zoom interactions
+- Decrease amount of re-renders triggered by useTouch hook
+
 ## [1.3.0] - 2019-07-10
 
 ### Added
@@ -45,7 +60,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.0...master
+[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.3...master
+[1.3.3]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.2...v1.3.3
+[1.3.2]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.1...v1.3.2
+[1.3.1]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/hyperlab/my-react-carousel/compare/v1.0.1...v1.1.0

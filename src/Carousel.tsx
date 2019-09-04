@@ -158,7 +158,8 @@ const Carousel: React.FC<CarouselProps> = (
             display: "flex",
             flexDirection: "row",
             transform: `translateX(${offset}px)`,
-            transition: `transform ${transition}ms ease`
+            transition: `transform ${transition}ms ease`,
+            touchAction: 'pan-y pinch-zoom'
           }}
         >
           {slides}

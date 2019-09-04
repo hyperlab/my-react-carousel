@@ -1,4 +1,5 @@
-import { default as React } from "react";
+import React from "react";
+import { isIosDevice } from "./isIosDevice";
 
 function useTouch(callback: (offset: number) => void) {
   const isSwiping = React.useRef(false);
@@ -14,30 +15,32 @@ function useTouch(callback: (offset: number) => void) {
   };
 
   React.useEffect(() => {
-    const preventDefault = (event: TouchEvent) => {
-      if (
-        event.changedTouches.length === 1 &&
-        isSwiping.current &&
-        event.cancelable
-      ) {
-        event.preventDefault();
-        event.returnValue = false;
-        return false;
-      }
-    };
+    if (isIosDevice) {
+      const preventDefault = (event: TouchEvent) => {
+        if (event.touches.length === 1 && isSwiping.current) {
+          if (event.cancelable) {
+            event.preventDefault();
+          } else {
+            reset();
+          }
+        }
+      };
 
-    document.addEventListener("touchmove", preventDefault, {
-      passive: false
-    });
+      document.addEventListener("touchmove", preventDefault, {
+        passive: false
+      });
 
-    return () => document.removeEventListener("touchmove", preventDefault);
-  }, [isSwiping]);
+      return () => {
+        document.removeEventListener("touchmove", preventDefault);
+      };
+    }
+  }, []);
 
   const onTouchStart = React.useCallback(
     (event: React.TouchEvent | React.MouseEvent) => {
       if (
-        (event as React.TouchEvent).targetTouches &&
-        (event as React.TouchEvent).targetTouches.length > 1
+        (event as React.TouchEvent).changedTouches &&
+        (event as React.TouchEvent).changedTouches.length > 1
       ) {
         // Multiple touch points indicates an attempt to pinch-to-zoom
         return null;
@@ -75,22 +78,26 @@ function useTouch(callback: (offset: number) => void) {
 
         const diffX = x - touchStartX.current;
         const diffY = y - touchStartY.current;
-
         setTouchOffset(diffX);
+
+        if (isIosDevice && isSwiping.current) {
+          event.stopPropagation();
+        }
+
         if (!isSwiping.current) {
-          if (Math.abs(diffY) > 10) {
+          if (Math.abs(diffY) > 10 * window.devicePixelRatio) {
             reset();
-          } else {
-            isSwiping.current = Math.abs(diffX) > 5;
+          } else if (Math.abs(diffX) > 5 * window.devicePixelRatio) {
+            isSwiping.current = true;
           }
         }
       }
     },
-    [touchStartX, touchStartY, isSwiping]
+    [touchStartX]
   );
 
   const onTouchEnd = React.useCallback(() => {
-    if (isSwiping.current) callback(touchOffset);
+    callback(touchOffset);
     reset();
   }, [touchOffset, callback]);
 
