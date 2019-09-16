@@ -1,8 +1,8 @@
-import { default as React } from "react";
+import React from "react";
 import useTouch from "./useTouch";
-import useFlexedSlides from "./useFlexedSlides";
+import useSlides from "./useSlides";
 import useNavigation from "./useNavigation";
-import useFlexedItemSize from "./useFlexedItemSize";
+import useItemSize from "./useItemSize";
 
 export interface RenderProps {
   slides: React.ReactElement;
@@ -39,9 +39,10 @@ const Carousel: React.FC<CarouselProps> = (
   },
   ref: () => void
 ) => {
-  const { slides, slideCount, preSlidesCount } = useFlexedSlides(children, {
+  const { slides, slideCount, preSlidesCount } = useSlides(children, {
     infinite,
-    slidesToShow
+    slidesToShow,
+    mode: "flex"
   });
 
   const navigation = useNavigation({
@@ -50,13 +51,14 @@ const Carousel: React.FC<CarouselProps> = (
     slideCount
   });
 
-  const { previous, next, currentIndex } = navigation;
+  const { previous, next, goToStep, currentIndex } = navigation;
 
   React.useImperativeHandle(
     ref,
     () => ({
       previous,
-      next
+      next,
+      goToStep
     }),
     [previous, next]
   );
@@ -65,14 +67,15 @@ const Carousel: React.FC<CarouselProps> = (
   const [itemSize, setItemSize] = React.useState(0);
   const [disableTransition, setDisableTransition] = React.useState(false);
 
-  useFlexedItemSize({
+  useItemSize({
     wrapper,
     callback: size => {
       setDisableTransition(true);
       setItemSize(size);
     },
     slidesToShow,
-    measure: "width"
+    measure: "width",
+    mode: "flex"
   });
 
   React.useEffect(() => {
@@ -159,7 +162,7 @@ const Carousel: React.FC<CarouselProps> = (
             flexDirection: "row",
             transform: `translateX(${offset}px)`,
             transition: `transform ${transition}ms ease`,
-            touchAction: 'pan-y pinch-zoom'
+            touchAction: "pan-y pinch-zoom"
           }}
         >
           {slides}

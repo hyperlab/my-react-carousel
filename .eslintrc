@@ -3,7 +3,8 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "react-hooks"
   ],
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -13,7 +14,9 @@
     }
   },
   "rules": {
-    "react/prop-types": [0]
+    "react/prop-types": [0],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "settings": {
     "react": {

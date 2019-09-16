@@ -31,7 +31,7 @@ function useNavigation({ infinite, slidesToShow, slideCount }: Options) {
       : currentIndex < 0
       ? currentIndex + slideCount
       : currentIndex;
-  const totalSteps = infinite ? slideCount : slideCount - slidesToShow + 1;
+  const totalSteps = infinite ? slideCount : slideCount - slidesToShow;
 
   return {
     previous,

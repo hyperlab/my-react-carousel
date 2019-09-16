@@ -1,6 +1,6 @@
-import { default as React } from "react";
-import useFlexedSlides from "./useFlexedSlides";
-import useFlexedItemSize from "./useFlexedItemSize";
+import React from "react";
+import useSlides from "./useSlides";
+import useItemSize from "./useItemSize";
 import useNavigation from "./useNavigation";
 
 export interface RenderProps {
@@ -35,9 +35,10 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
   },
   ref: () => void
 ) => {
-  const { slides, slideCount, preSlidesCount } = useFlexedSlides(children, {
+  const { slides, slideCount, preSlidesCount } = useSlides(children, {
     infinite,
-    slidesToShow
+    slidesToShow,
+    mode: "fixed"
   });
 
   const navigation = useNavigation({
@@ -46,13 +47,14 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
     slideCount
   });
 
-  const { previous, next, currentIndex } = navigation;
+  const { previous, next, goToStep, currentIndex } = navigation;
 
   React.useImperativeHandle(
     ref,
     () => ({
       previous,
-      next
+      next,
+      goToStep
     }),
     [previous, next]
   );
@@ -61,14 +63,15 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
   const [itemSize, setItemSize] = React.useState(0);
   const [disableTransition, setDisableTransition] = React.useState(false);
 
-  useFlexedItemSize({
+  useItemSize({
     wrapper,
     callback: size => {
       setDisableTransition(true);
       setItemSize(size);
     },
     slidesToShow,
-    measure: "height"
+    measure: "height",
+    mode: "fixed"
   });
 
   React.useEffect(() => {
@@ -92,7 +95,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
     }
   }, [disableTransition, currentIndex, slideCount, transitionDuration]);
 
-  const offset = (currentIndex + preSlidesCount) * itemSize;
+  const offset = 0 - (currentIndex + preSlidesCount) * itemSize;
   const transition = disableTransition || transitionDuration;
 
   return render({

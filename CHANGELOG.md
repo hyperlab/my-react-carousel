@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add linting rules for React hooks
+- Add VerticalCarousel that uses fixed heights
+- Expose goToStep on ref
+- Fix bug in totalSteps logic for non-infinite carousels
+
 ## [1.3.3] - 2019-07-11
 
 - Upgrade dependencies due to security vulnerability.
