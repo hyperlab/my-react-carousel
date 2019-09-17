@@ -8,6 +8,20 @@ interface Options {
 
 function useNavigation({ infinite, slidesToShow, slideCount }: Options) {
   const [currentIndex, setIndex] = React.useState(0);
+
+  const goToStep = React.useCallback(
+    newIndex =>
+      setIndex(() => {
+        if (infinite) return newIndex;
+
+        if (newIndex < 0) return 0;
+        if (newIndex > slideCount - slidesToShow)
+          return slideCount - slidesToShow;
+
+        return newIndex;
+      }),
+    [infinite]
+  );
   const previous = React.useCallback(
     () =>
       setIndex(index => {
@@ -41,7 +55,7 @@ function useNavigation({ infinite, slidesToShow, slideCount }: Options) {
     currentIndex,
     currentStep,
     totalSteps,
-    goToStep: setIndex
+    goToStep
   };
 }
 
