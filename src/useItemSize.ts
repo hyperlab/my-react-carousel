@@ -41,7 +41,7 @@ function useItemSize({
     updateItemSize();
     window.addEventListener("resize", updateItemSize);
     return () => window.removeEventListener("resize", updateItemSize);
-  }, [updateItemSize]);
+  });
 }
 
 export default useItemSize;

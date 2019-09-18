@@ -101,9 +101,10 @@ function useTouch(callback: (offset: number) => void) {
     reset();
   }, [touchOffset, callback]);
 
-  const onClick = React.useCallback(
+  const onClickCapture = React.useCallback(
     event => {
-      if (touchOffset !== 0) {
+      // Prevent click events when we're swiping
+      if (Math.abs(touchOffset) > 5) {
         event.preventDefault();
         event.stopPropagation();
       }
@@ -117,7 +118,7 @@ function useTouch(callback: (offset: number) => void) {
     onTouchStart,
     onTouchMove,
     onTouchEnd,
-    onClick
+    onClickCapture
   };
 }
 

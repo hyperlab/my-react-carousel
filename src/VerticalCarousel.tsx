@@ -38,7 +38,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
   const { slides, slideCount, preSlidesCount } = useSlides(children, {
     infinite,
     slidesToShow,
-    mode: "fixed"
+    mode: "flex"
   });
 
   const navigation = useNavigation({
@@ -71,7 +71,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
     },
     slidesToShow,
     measure: "height",
-    mode: "fixed"
+    mode: "flex"
   });
 
   React.useEffect(() => {
@@ -113,6 +113,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
           style={{
             display: "flex",
             flexDirection: "column",
+            height: "100%",
             transform: `translateY(${offset}px)`,
             transition: `transform ${transition}ms ease`
           }}

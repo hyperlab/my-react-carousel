@@ -61,6 +61,8 @@ const App = () => {
 
 Note that when using ref we have no way of knowing wether there is a next slide or not, so this is only recommended in the infinite mode (which is enabled by default).
 
+Also available on the ref is the `goToStep` method which is useful if you want to control the carousel from something else.
+
 ### Sophisticated next/preview buttons
 
 In order to know if there is a slide before or after the current one, we need to get some more data. This is where the powerful render API comes handy.
@@ -137,7 +139,22 @@ The generateDots helper will add dots to the props in the render function, that 
 
 ### children (Components)
 
-All slides you want to render in the carousel. The carousel will apply some styling to the element, so make sure that the outermost element is a DOM node, or make sure that you pass it down to the outermost DOM node. Specifically, the flex is set, so make sure you don't override this.
+All slides you want to render in the carousel. The carousel will apply some styling to the elements, so make sure that the outermost element is a DOM node, or that you pass on the `style` prop down to the outermost DOM node. Specifically, the flex is set, so make sure you don't override this.
+
+```javascript
+import Carousel from "my-react-carousel";
+
+const NoPass = ({ children }) => <div>{children}</div>;
+const Pass = ({ style, children }) => <div style={style}>{children}</div>;
+
+const App = () => (
+  <Carousel>
+    <div>This will work all right</div>
+    <NoPass>This will not</NoPass>
+    <Pass>But this works as well!</Pass>
+  </Carousel>
+);
+```
 
 ### ref
 
@@ -186,6 +203,44 @@ Index of the current slide you are at.
 #### goToStep (function)
 
 Go to a specific step.
+
+#### Props passed on
+
+The following incoming props are directly passed from the main component:
+
+- `slidesToShow`
+- `infinite`
+- `transitionDuration`
+- `centerCurrentSlide`
+
+## VerticalCarousel
+
+`my-react-carousel` also exposes a simple vertical carousel implementation. This doesn't have any touch events, so you need to use it together with some kind of external controls such as dots or arrows for it to work properly.
+
+Make sure to have a set height on the surrounding elements to have it flex properly.
+
+```javascript
+import VerticalCarousel from "my-react-carousel/dist/VerticalCarousel";
+
+const App = () => (
+  <div
+    style={{
+      height: "500px"
+    }}
+  >
+    <VerticalCarousel slidesToShow={3}>
+      <img src="/first.png" />
+      <img src="/second.png" />
+      <img src="/third.png" />
+      <img src="/fourth.png" />
+      <img src="/fifth.png" />
+      <img src="/sixth.png" />
+    </VerticalCarousel>
+  </div>
+);
+```
+
+The VerticalCarousel is at an experimental stage. Please add issues for any bugs/feature requests you might have!
 
 ## Issues
 

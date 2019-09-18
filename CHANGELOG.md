@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Use onClickCapture handler for click prevention when swiping
 - Add linting rules for React hooks
-- Add VerticalCarousel that uses fixed heights
+- Add VerticalCarousel
 - Expose goToStep on ref
 - Fix bug in totalSteps logic for non-infinite carousels
 

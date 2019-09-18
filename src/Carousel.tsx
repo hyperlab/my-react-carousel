@@ -105,7 +105,7 @@ const Carousel: React.FC<CarouselProps> = (
     onTouchEnd,
     isTouching,
     touchOffset,
-    onClick
+    onClickCapture
   } = useTouch(
     React.useCallback(
       offset => {
@@ -156,7 +156,7 @@ const Carousel: React.FC<CarouselProps> = (
           onMouseMove={onTouchMove}
           onMouseUp={onTouchEnd}
           onMouseLeave={onTouchEnd}
-          onClick={onClick}
+          onClickCapture={onClickCapture}
           style={{
             display: "flex",
             flexDirection: "row",
