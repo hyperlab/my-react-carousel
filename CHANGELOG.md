@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2019-09-18
+
 - Use onClickCapture handler for click prevention when swiping
 - Add linting rules for React hooks
 - Add VerticalCarousel
@@ -66,7 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.3...master
+[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.2...master
+[1.4.2]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.3...v1.4.2
 [1.3.3]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.0...v1.3.1
