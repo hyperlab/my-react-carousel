@@ -34,14 +34,14 @@ function useItemSize({
           }
         }
       }),
-    [slidesToShow]
+    [slidesToShow, callback]
   );
 
   React.useLayoutEffect(() => {
     updateItemSize();
     window.addEventListener("resize", updateItemSize);
     return () => window.removeEventListener("resize", updateItemSize);
-  }, [updateItemSize]);
+  });
 }
 
 export default useItemSize;

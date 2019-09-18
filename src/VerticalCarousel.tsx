@@ -66,8 +66,10 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
   useItemSize({
     wrapper,
     callback: size => {
-      setDisableTransition(true);
-      setItemSize(size);
+      if (itemSize !== size) {
+        setDisableTransition(true);
+        setItemSize(size);
+      }
     },
     slidesToShow,
     measure: "height",

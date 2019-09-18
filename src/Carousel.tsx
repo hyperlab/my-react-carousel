@@ -70,8 +70,10 @@ const Carousel: React.FC<CarouselProps> = (
   useItemSize({
     wrapper,
     callback: size => {
-      setDisableTransition(true);
-      setItemSize(size);
+      if (itemSize !== size) {
+        setDisableTransition(true);
+        setItemSize(size);
+      }
     },
     slidesToShow,
     measure: "width",
