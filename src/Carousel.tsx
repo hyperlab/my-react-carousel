@@ -129,7 +129,7 @@ const Carousel: React.FC<CarouselProps> = (
           });
         }
       },
-      [itemSize]
+      [itemSize, slideCount, slidesToShow, navigation.goToStep]
     )
   );
 

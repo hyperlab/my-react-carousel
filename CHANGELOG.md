@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2019-10-17
+
+- Fix bug that didn't allow you to swipe the carousel when amount of slides changed
+
 ## [1.4.2] - 2019-09-18
 
 - Use onClickCapture handler for click prevention when swiping
@@ -68,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.2...master
+[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.3...master
+[1.4.3]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.3...v1.4.2
 [1.3.3]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.1...v1.3.2
