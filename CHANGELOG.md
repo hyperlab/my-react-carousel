@@ -76,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.3...master
+[unreleased]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.4...master
+[1.4.4]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.3...v1.4.4
 [1.4.3]: https://github.com/hyperlab/my-react-carousel/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.3...v1.4.2
 [1.3.3]: https://github.com/hyperlab/my-react-carousel/compare/v1.3.2...v1.3.3
