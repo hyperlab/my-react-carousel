@@ -140,6 +140,10 @@ const Carousel: React.FC<CarouselProps> = (
     touchOffset - (currentIndex + preSlidesCount) * itemSize + centeringOffset;
   const transition = disableTransition || isTouching ? 0 : transitionDuration;
 
+  const initialOffset =
+    -(currentIndex + preSlidesCount) * (100 / slidesToShow) +
+    (centerCurrentSlide ? (slidesToShow / 2 - 0.5) * (100 / slidesToShow) : 0);
+
   return render({
     ...navigation,
     slides: (
@@ -162,7 +166,9 @@ const Carousel: React.FC<CarouselProps> = (
           style={{
             display: "flex",
             flexDirection: "row",
-            transform: `translateX(${offset}px)`,
+            transform: `translateX(${
+              itemSize ? `${offset}px` : `${initialOffset}%`
+            })`,
             transition: `transform ${transition}ms ease`,
             touchAction: "pan-y pinch-zoom"
           }}

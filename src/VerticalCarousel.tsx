@@ -97,7 +97,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
     }
   }, [disableTransition, currentIndex, slideCount, transitionDuration]);
 
-  const offset = 0 - (currentIndex + preSlidesCount) * itemSize;
+  const offset = -(currentIndex + preSlidesCount) * (100 / slidesToShow);
   const transition = disableTransition || transitionDuration;
 
   return render({
@@ -116,7 +116,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = (
             display: "flex",
             flexDirection: "column",
             height: "100%",
-            transform: `translateY(${offset}px)`,
+            transform: `translateY(${offset}%)`,
             transition: `transform ${transition}ms ease`
           }}
         >
