@@ -20,7 +20,6 @@ export interface RenderProps {
 }
 
 export interface CarouselProps {
-  children: React.ReactElement;
   slidesToShow: number;
   infinite: boolean;
   transitionDuration: number;
