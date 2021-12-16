@@ -1,3 +1,2 @@
-import Carousel from "./Carousel";
-export default Carousel;
+export { default as default, RenderProps, CarouselProps } from "./Carousel";
 export { generateDots } from "./dots";
