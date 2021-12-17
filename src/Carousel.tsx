@@ -20,15 +20,17 @@ export interface RenderProps {
 }
 
 export interface CarouselProps {
-  slidesToShow: number;
-  infinite: boolean;
-  transitionDuration: number;
-  centerCurrentSlide: boolean;
-  render: (props: RenderProps) => React.ReactElement;
+  slidesToShow?: number;
+  infinite?: boolean;
+  transitionDuration?: number;
+  centerCurrentSlide?: boolean;
+  render?: (props: RenderProps) => React.ReactElement;
 }
 
-const Carousel: React.FC<CarouselProps> = (
-  {
+export type RefInstance = Pick<RenderProps, "next" | "previous" | "goToStep">
+
+export default React.forwardRef<unknown, React.PropsWithChildren<CarouselProps>>(
+({
     children,
     slidesToShow = 3,
     infinite = true,
@@ -36,7 +38,7 @@ const Carousel: React.FC<CarouselProps> = (
     centerCurrentSlide = false,
     render = ({ slides }: RenderProps) => slides
   },
-  ref: () => void
+  ref
 ) => {
   const { slides, slideCount, preSlidesCount } = useSlides(children, {
     infinite,
@@ -52,7 +54,7 @@ const Carousel: React.FC<CarouselProps> = (
 
   const { previous, next, goToStep, currentIndex } = navigation;
 
-  React.useImperativeHandle(
+  React.useImperativeHandle<unknown, RefInstance>(
     ref,
     () => ({
       previous,
@@ -181,6 +183,4 @@ const Carousel: React.FC<CarouselProps> = (
     transitionDuration,
     centerCurrentSlide
   });
-};
-
-export default React.forwardRef(Carousel);
+});

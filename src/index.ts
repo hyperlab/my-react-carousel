@@ -1,2 +1,2 @@
-export { default as default, RenderProps, CarouselProps } from "./Carousel";
-export { generateDots } from "./dots";
+export { default, RefInstance, RenderProps, CarouselProps } from "./Carousel";
+export { generateDots, Dot } from "./dots";

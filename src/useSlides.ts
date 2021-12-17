@@ -7,7 +7,7 @@ interface Options {
 }
 
 function useSlides(
-  children: React.ReactElement,
+  children: React.ReactNode,
   { infinite, slidesToShow, mode = "flex" }: Options
 ) {
   return React.useMemo(() => {
