@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useSlides from "./useSlides";
 import useItemSize from "./useItemSize";
 import useNavigation from "./useNavigation";
@@ -19,10 +19,11 @@ export interface RenderProps {
 
 export interface VerticalCarouselProps {
   children: React.ReactElement;
-  slidesToShow: number;
-  infinite: boolean;
-  transitionDuration: number;
-  render: (props: RenderProps) => React.ReactElement;
+  slidesToShow?: number;
+  infinite?: boolean;
+  transitionDuration?: number;
+  render?: (props: RenderProps) => React.ReactElement;
+  onCurrentSlideChanged?: (currentSlide: number) => void;
 }
 
 export default React.forwardRef<
@@ -36,6 +37,7 @@ export default React.forwardRef<
       infinite = true,
       transitionDuration = 300,
       render = ({ slides }: RenderProps) => slides,
+      onCurrentSlideChanged,
     },
     ref: () => void
   ) => {
@@ -52,6 +54,12 @@ export default React.forwardRef<
     });
 
     const { previous, next, goToStep, currentIndex } = navigation;
+
+    useEffect(() => {
+      if (typeof onCurrentSlideChanged === 'function') {
+          onCurrentSlideChanged(currentIndex)
+      }
+    },[currentIndex])
 
     React.useImperativeHandle(
       ref,

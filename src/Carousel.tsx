@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useTouch from "./useTouch";
 import useSlides from "./useSlides";
 import useNavigation from "./useNavigation";
@@ -25,6 +25,7 @@ export interface CarouselProps {
   transitionDuration?: number;
   centerCurrentSlide?: boolean;
   render?: (props: RenderProps) => React.ReactElement;
+  onCurrentSlideChanged?: (currentSlide: number) => void;
 }
 
 export type RefInstance = Pick<RenderProps, "next" | "previous" | "goToStep">
@@ -36,7 +37,8 @@ export default React.forwardRef<unknown, React.PropsWithChildren<CarouselProps>>
     infinite = true,
     transitionDuration = 300,
     centerCurrentSlide = false,
-    render = ({ slides }: RenderProps) => slides
+    render = ({ slides }: RenderProps) => slides,
+    onCurrentSlideChanged,
   },
   ref
 ) => {
@@ -53,6 +55,12 @@ export default React.forwardRef<unknown, React.PropsWithChildren<CarouselProps>>
   });
 
   const { previous, next, goToStep, currentIndex } = navigation;
+
+  useEffect(() => {
+    if (typeof onCurrentSlideChanged === 'function') {
+        onCurrentSlideChanged(currentIndex)
+    }
+  },[currentIndex])
 
   React.useImperativeHandle<unknown, RefInstance>(
     ref,
